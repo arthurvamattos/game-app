@@ -2,5 +2,11 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true
-  }
+  },
+  "include": [
+    "src"
+, "RootComponent.tsx"  ],
+  "files": [
+    "src/styles/styled.d.ts"
+  ]
 }
