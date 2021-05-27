@@ -36,15 +36,23 @@ export const HeaderButton = styled.TouchableOpacity`
   align-items: center;
 `;
 
+export const Content = styled.View`
+  padding: 16px 24px 0;
+  width: 100%;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  margin-top: -24px;
+  background: ${(props) => props.theme.colors.background};
+`;
+
 export const Console = styled.Text`
-  padding: 24px 24px 0;
+  padding-top: 24px;
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.heading};
   font-size: 14px;
 `;
 
 export const Name = styled.Text`
-  padding: 0 24px;
   color: ${(props) => props.theme.colors.text};
   font-family: ${(props) => props.theme.fonts.heading};
   font-size: 32px;
@@ -52,7 +60,6 @@ export const Name = styled.Text`
 `;
 
 export const Description = styled.Text`
-  padding: 0 24px;
   color: ${(props) => props.theme.colors.text};
   font-family: ${(props) => props.theme.fonts.text};
   font-size: 14px;
@@ -60,8 +67,6 @@ export const Description = styled.Text`
 `;
 
 export const RateContainer = styled.View`
-  padding: 0 24px;
-
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

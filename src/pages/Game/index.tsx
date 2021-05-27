@@ -10,6 +10,7 @@ import {
   Header,
   HeaderButtonWrapper,
   HeaderButton,
+  Content,
   Console,
   Name,
   Description,
@@ -49,28 +50,30 @@ const Game = () => {
           </HeaderButtonWrapper>
         </Header>
       </SharedElement>
-      <Console>{game.console}</Console>
-      <Name numberOfLines={1}>{game.name}</Name>
-      <Description numberOfLines={7}>{game.description}</Description>
-      <RateContainer>
-        <RateWrapper>
-          <Feather name="star" size={28} color={theme.colors.text} />
-          <View>
-            <RateTitle>Member ratings (IGDB)</RateTitle>
-            <Rate>95</Rate>
-          </View>
-        </RateWrapper>
-        <RateWrapper>
-          <Feather name="star" size={28} color={theme.colors.text} />
-          <View>
-            <RateTitle>Critic ratings (IGDB)</RateTitle>
-            <Rate>97</Rate>
-          </View>
-        </RateWrapper>
-      </RateContainer>
-      <AddButton onPress={() => {}}>
-        <AddButtonText>Add to list</AddButtonText>
-      </AddButton>
+      <Content>
+        <Console>{game.console}</Console>
+        <Name numberOfLines={1}>{game.name}</Name>
+        <Description numberOfLines={7}>{game.description}</Description>
+        <RateContainer>
+          <RateWrapper>
+            <Feather name="star" size={28} color={theme.colors.text} />
+            <View>
+              <RateTitle>Member ratings (IGDB)</RateTitle>
+              <Rate>95</Rate>
+            </View>
+          </RateWrapper>
+          <RateWrapper>
+            <Feather name="star" size={28} color={theme.colors.text} />
+            <View>
+              <RateTitle>Critic ratings (IGDB)</RateTitle>
+              <Rate>97</Rate>
+            </View>
+          </RateWrapper>
+        </RateContainer>
+        <AddButton onPress={() => {}}>
+          <AddButtonText>Add to list</AddButtonText>
+        </AddButton>
+      </Content>
     </Container>
   );
 };
