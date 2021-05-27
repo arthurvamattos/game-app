@@ -39,9 +39,6 @@ export const HeaderButton = styled.TouchableOpacity`
 export const Content = styled.View`
   padding: 16px 24px 0;
   width: 100%;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-  margin-top: -24px;
   background: ${(props) => props.theme.colors.background};
 `;
 
