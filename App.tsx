@@ -11,7 +11,7 @@ import {
 } from "@expo-google-fonts/ubuntu";
 
 import { useTheme } from "./src/contexts/theme";
-import Home from "./src/pages/Home";
+import Routes from "./src/routes";
 
 export default function App() {
   const { theme } = useTheme();
@@ -28,7 +28,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Home />
+      <Routes />
       <StatusBar
         backgroundColor={theme.colors.background}
         style={theme.title === "light" ? "dark" : "light"}

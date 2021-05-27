@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import fakeGames from "../../utils/fakeGames";
 
 import Favorites from "../Favorites";
@@ -38,11 +38,11 @@ function Library() {
 
       <Title>Now Playing</Title>
 
-      <FlatList
-        data={fakeGames}
-        keyExtractor={(game) => String(game.id)}
-        renderItem={({ item }) => <GameCard game={item} />}
-      />
+      <View>
+        {fakeGames.map((game) => (
+          <GameCard key={game.id} game={game} />
+        ))}
+      </View>
     </Container>
   );
 }

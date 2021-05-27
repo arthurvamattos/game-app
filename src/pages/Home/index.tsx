@@ -24,7 +24,10 @@ const Home: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <Container showsVerticalScrollIndicator={false}>
+    <Container
+      contentContainerStyle={{ flexGrow: 1 }}
+      showsVerticalScrollIndicator={false}
+    >
       <HeadingWrapper>
         <View>
           <Heading>Hello there,</Heading>

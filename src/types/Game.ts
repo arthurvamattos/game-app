@@ -4,4 +4,5 @@ export interface GameProps {
   year: string;
   cover: string;
   console: string;
+  description: string;
 }

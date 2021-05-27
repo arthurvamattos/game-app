@@ -24,6 +24,7 @@ import {
 } from "./styles";
 
 import fakeGames from "../../utils/fakeGames";
+import { useNavigation } from "@react-navigation/core";
 const VISIBLE_ITEMS = 3;
 
 interface ItemProps {
@@ -31,8 +32,13 @@ interface ItemProps {
   index: number;
 }
 
+const AnimatedFavoriteWrapper =
+  Animated.createAnimatedComponent(FavoriteWrapper);
+
 const Favorites: React.FC = () => {
   const [index, setIndex] = useState(0);
+
+  const navigation = useNavigation();
 
   const scrollXIndex = useRef(new Animated.Value(0)).current;
   const scrollXAnimated = useRef(new Animated.Value(0)).current;
@@ -54,6 +60,10 @@ const Favorites: React.FC = () => {
     }).start();
   });
 
+  function handleGamePressed(game: GameProps) {
+    navigation.navigate("Game", game);
+  }
+
   const renderItem: React.FC<ItemProps> = ({ item, index }) => {
     const inputRange = [index - 1, index, index + 1];
 
@@ -73,7 +83,8 @@ const Favorites: React.FC = () => {
     });
 
     return (
-      <Animated.View
+      <AnimatedFavoriteWrapper
+        onPress={() => handleGamePressed(item)}
         style={{
           overflow: "hidden",
           position: "absolute",
@@ -82,14 +93,12 @@ const Favorites: React.FC = () => {
           opacity,
         }}
       >
-        <FavoriteWrapper>
-          <FavoriteImage
-            source={{
-              uri: item.cover,
-            }}
-          />
-        </FavoriteWrapper>
-      </Animated.View>
+        <FavoriteImage
+          source={{
+            uri: item.cover,
+          }}
+        />
+      </AnimatedFavoriteWrapper>
     );
   };
 

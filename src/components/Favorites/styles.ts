@@ -1,5 +1,6 @@
 import { Dimensions, Animated } from "react-native";
 import styled from "styled-components/native";
+import { RectButton } from "react-native-gesture-handler";
 
 const { width } = Dimensions.get("screen");
 export const OVERFLOW_HEIGHT = 70;
@@ -25,9 +26,7 @@ export const Title = styled.Text`
   font-size: 32px;
 `;
 
-export const FavoriteWrapper = styled.TouchableOpacity.attrs({
-  activeOpacity: 0.4,
-})`
+export const FavoriteWrapper = styled(RectButton)`
   overflow: hidden;
   border-radius: 8px;
 `;
