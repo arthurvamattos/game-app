@@ -1,20 +1,36 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createSharedElementStackNavigator } from "react-navigation-shared-element";
+
 import Home from "./pages/Home";
 import Game from "./pages/Game";
 
-const Stack = createStackNavigator();
+export default createSharedElementStackNavigator(
+  {
+    Home,
+    Game,
+  },
+  {
+    mode: "modal",
+    headerMode: "none",
+    defaultNavigationOptions: {
+      cardStyleInterpolator: ({ current: { progress } }) => {
+        const opacity = progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 1],
+          extrapolate: "clamp",
+        });
 
-function Routes() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator headerMode="none">
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Game" component={Game} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+        const borderRadius = progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [16, 0],
+          extrapolate: "clamp",
+        });
 
-export default Routes;
+        return { cardStyle: { opacity, borderRadius } };
+      },
+      gestureEnabled: false,
+      cardStyle: {
+        backgroundColor: "transparent",
+      },
+    },
+  }
+);

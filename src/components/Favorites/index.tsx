@@ -5,6 +5,8 @@ import {
   FlingGestureHandler,
   State,
 } from "react-native-gesture-handler";
+import { useNavigation } from "react-navigation-hooks";
+
 import { GameProps } from "../../types/Game";
 
 import {
@@ -24,7 +26,6 @@ import {
 } from "./styles";
 
 import fakeGames from "../../utils/fakeGames";
-import { useNavigation } from "@react-navigation/core";
 const VISIBLE_ITEMS = 3;
 
 interface ItemProps {
@@ -38,7 +39,7 @@ const AnimatedFavoriteWrapper =
 const Favorites: React.FC = () => {
   const [index, setIndex] = useState(0);
 
-  const navigation = useNavigation();
+  const { navigate } = useNavigation();
 
   const scrollXIndex = useRef(new Animated.Value(0)).current;
   const scrollXAnimated = useRef(new Animated.Value(0)).current;
@@ -61,7 +62,7 @@ const Favorites: React.FC = () => {
   });
 
   function handleGamePressed(game: GameProps) {
-    navigation.navigate("Game", game);
+    navigate("Game", { game });
   }
 
   const renderItem: React.FC<ItemProps> = ({ item, index }) => {
@@ -93,11 +94,18 @@ const Favorites: React.FC = () => {
           opacity,
         }}
       >
-        <FavoriteImage
-          source={{
-            uri: item.cover,
+        <View
+          style={{
+            overflow: "hidden",
+            borderRadius: 16,
           }}
-        />
+        >
+          <FavoriteImage
+            source={{
+              uri: item.cover,
+            }}
+          />
+        </View>
       </AnimatedFavoriteWrapper>
     );
   };

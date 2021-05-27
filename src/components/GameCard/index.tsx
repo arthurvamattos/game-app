@@ -1,7 +1,9 @@
 import React from "react";
 import { Feather } from "@expo/vector-icons";
-import { Animated, Vibration } from "react-native";
+import { Animated, Image, Vibration } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
+import { useNavigation } from "react-navigation-hooks";
+import { SharedElement } from "react-navigation-shared-element";
 
 import { GameProps } from "../../types/Game";
 
@@ -21,8 +23,13 @@ interface GameCardProps {
 }
 
 const GameCard: React.FC<GameCardProps> = ({ game }) => {
+  const { navigate } = useNavigation();
+
   function handleDelete(id: string) {
     Vibration.vibrate();
+  }
+  function handleGamePressed(game: GameProps) {
+    navigate("Game", { game });
   }
 
   return (
@@ -40,12 +47,15 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
         </Animated.View>
       )}
     >
-      <Game>
-        <GameImage
-          source={{
-            uri: game.cover,
-          }}
-        />
+      <Game onPress={() => handleGamePressed(game)}>
+        <SharedElement id={game.id}>
+          <GameImage
+            source={{
+              uri: game.cover,
+            }}
+          />
+        </SharedElement>
+
         <GameDetails>
           <Console>{game.console}</Console>
           <GameName>{game.name}</GameName>
