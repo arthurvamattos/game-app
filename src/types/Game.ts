@@ -4,5 +4,8 @@ export interface GameProps {
   year: string;
   cover: string;
   console: string;
-  description: string;
+  summary: string;
+  rating: string;
+  aggregated_rating: string;
+  platforms: [string];
 }

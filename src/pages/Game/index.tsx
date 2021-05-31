@@ -53,7 +53,7 @@ const Game = () => {
       <Content>
         <Console>{game.console}</Console>
         <Name numberOfLines={1}>{game.name}</Name>
-        <Description numberOfLines={7}>{game.description}</Description>
+        <Description numberOfLines={7}>{game.summary}</Description>
         <RateContainer>
           <RateWrapper>
             <Feather name="star" size={28} color={theme.colors.text} />
