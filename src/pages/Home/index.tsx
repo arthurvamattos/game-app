@@ -55,7 +55,7 @@ const Home: React.FC = () => {
         />
       </Search>
 
-      {search === "" ? <Library /> : <SearchResults />}
+      {search === "" ? <Library /> : <SearchResults query={search} />}
     </Container>
   );
 };

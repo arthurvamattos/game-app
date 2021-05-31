@@ -40,29 +40,3 @@ export const GameYear = styled.Text`
   font-size: 12px;
   margin-left: auto;
 `;
-
-export const DeleteGameButton = styled.TouchableOpacity.attrs({
-  activeOpacity: 1,
-})`
-  background: ${(props) => props.theme.colors.primary};
-  width: 87px;
-  height: 87px;
-  border-radius: 16px;
-  right: 24px;
-  z-index: 5;
-
-  align-items: center;
-  justify-content: center;
-`;
-
-export const DeleteGameButtonComplement = styled.View`
-  background: ${(props) => props.theme.colors.primary};
-  width: 36px;
-  height: 87px;
-  left: -40px;
-  bottom: 87px;
-  z-index: 4;
-
-  align-items: center;
-  justify-content: center;
-`;

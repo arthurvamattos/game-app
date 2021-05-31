@@ -15,6 +15,7 @@ import {
 
 import { useTheme } from "./src/contexts/theme";
 import Routes from "./src/routes";
+import getAuthToken from "./src/utils/getAuthToken";
 
 const AppNavigator = createAppContainer(
   createStackNavigator({
@@ -40,6 +41,8 @@ export default function App() {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+
+  getAuthToken();
 
   return (
     <ThemeProvider theme={theme}>

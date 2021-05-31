@@ -57,8 +57,8 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
         </SharedElement>
 
         <GameDetails>
-          <Console>{game.console}</Console>
-          <GameName>{game.name}</GameName>
+          <Console numberOfLines={1}>{game.platforms.join(", ")}</Console>
+          <GameName numberOfLines={1}>{game.name}</GameName>
         </GameDetails>
         <GameYear>{game.year}</GameYear>
       </Game>
