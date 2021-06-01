@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { ThemeProvider } from "styled-components";
 
@@ -31,6 +31,15 @@ const AppNavigator = createAppContainer(
 
 export default function App() {
   const { theme } = useTheme();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function loadToken() {
+      await getAuthToken();
+      setLoading(false);
+    }
+    loadToken();
+  }, []);
 
   let [fontsLoaded] = useFonts({
     Ubuntu_400Regular,
@@ -38,11 +47,9 @@ export default function App() {
     Ubuntu_700Bold,
   });
 
-  if (!fontsLoaded) {
+  if (!fontsLoaded || loading) {
     return <AppLoading />;
   }
-
-  getAuthToken();
 
   return (
     <ThemeProvider theme={theme}>

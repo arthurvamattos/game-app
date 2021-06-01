@@ -1,5 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { isBefore } from "date-fns";
 import api from "../services/api";
 import { IGDB_CLIENT_ID, IGDB_CLIENT_SECRET } from "@env";
 
