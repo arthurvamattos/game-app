@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { View } from "react-native";
+import { debounce } from "lodash";
 import { Feather } from "@expo/vector-icons";
 
 import { useTheme } from "../../contexts/theme";
 
 import Library from "../../components/Library";
 import SearchResults from "../../components/SearchResults";
+
+import { GameProps } from "../../types/Game";
+import ApiResponse from "../../types/ApiResponse";
+import api, { getGameQuery } from "../../services/api";
 
 import {
   Container,
@@ -16,12 +21,69 @@ import {
   Search,
   SearchIcon,
   SearchInput,
+  MinimumLettersNotice,
 } from "./styles";
 
 const Home: React.FC = () => {
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [minimumLettersNotice, setMinimumLettersNotice] = useState(false);
 
+  const [results, setResults] = useState<GameProps[]>([]);
   const { theme, toggleTheme } = useTheme();
+
+  const loadResults = useCallback(
+    debounce(async () => {
+      setMinimumLettersNotice(false);
+      setLoading(true);
+
+      const response = await api.post<ApiResponse[]>(
+        "https://api.igdb.com/v4/games",
+        getGameQuery(search)
+      );
+      if (response.data) {
+        const serializedGames =
+          response.data.length > 0
+            ? response.data
+                .filter((game) => game.cover !== undefined)
+                .map((game) => {
+                  const cover = `https:${game.cover.url.replace(
+                    "thumb",
+                    "1080p"
+                  )}`;
+
+                  const platforms = game.platforms
+                    ? game.platforms.map((platform) => platform.name)
+                    : ["Not found"];
+
+                  return {
+                    id: String(game.id),
+                    name: game.name,
+                    summary: game.summary,
+                    rating: "95",
+                    aggregated_rating: "97",
+                    year: game.release_dates[0].y.toString(),
+                    cover,
+                    platforms,
+                  };
+                })
+            : [];
+
+        setResults(serializedGames);
+      }
+
+      setLoading(false);
+    }, 1000),
+    [search]
+  );
+
+  useEffect(() => {
+    if (search.length >= 3) {
+      loadResults();
+    } else {
+      setMinimumLettersNotice(true);
+    }
+  }, [search]);
 
   return (
     <Container
@@ -55,7 +117,17 @@ const Home: React.FC = () => {
         />
       </Search>
 
-      {search === "" ? <Library /> : <SearchResults query={search} />}
+      {loading ? (
+        <MinimumLettersNotice>Loading...</MinimumLettersNotice>
+      ) : (search && !minimumLettersNotice) === "" ? (
+        <Library />
+      ) : minimumLettersNotice ? (
+        <MinimumLettersNotice>
+          You must enter three letters before starting the search
+        </MinimumLettersNotice>
+      ) : (
+        <SearchResults games={results} />
+      )}
     </Container>
   );
 };

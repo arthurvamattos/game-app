@@ -8,6 +8,7 @@ export const Game = styled(RectButton)`
   flex-direction: row;
   align-items: center;
   padding: 12px;
+  width: 100%;
 `;
 
 export const GameImage = styled.Image`

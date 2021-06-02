@@ -57,3 +57,13 @@ export const SearchInput = styled.TextInput`
   color: ${(props) => props.theme.colors.text};
   font-family: ${(props) => props.theme.fonts.text}; ;
 `;
+
+export const MinimumLettersNotice = styled.Text`
+  font-size: 16px;
+  margin: 24px;
+  text-align: center;
+  line-height: 28px;
+
+  font-family: ${(props) => props.theme.fonts.heading};
+  color: ${(props) => props.theme.colors.text};
+`;
