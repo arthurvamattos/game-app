@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "../../contexts/theme";
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation } from "react-navigation-hooks";
@@ -31,11 +31,26 @@ const Game = () => {
   const [favorite, setFavorite] = useState(false);
   const [list, setList] = useState("Now Playing");
   const [loading, setLoading] = useState(false);
+  const [listButtonText, setListButtonText] = useState("Add to list");
   const modalizeRef = useRef<Modalize>(null);
 
   const { theme } = useTheme();
   const { goBack, getParam } = useNavigation();
   const game: GameProps = getParam("game");
+
+  useEffect(() => {
+    async function loadGame() {
+      const gameController = new GameController();
+      const storegedGame = await gameController.find(game.id);
+
+      if (storegedGame.name) {
+        setFavorite(storegedGame.favorite);
+        setList(storegedGame.list);
+        setListButtonText("Change list");
+      }
+    }
+    loadGame();
+  }, []);
 
   const handleOpenModal = () => {
     modalizeRef.current?.open();
@@ -80,7 +95,7 @@ const Game = () => {
         <Name numberOfLines={1}>{game.name}</Name>
         <Description numberOfLines={7}>{game.summary}</Description>
         <AddButton onPress={handleOpenModal}>
-          <AddButtonText>Add to list</AddButtonText>
+          <AddButtonText>{listButtonText}</AddButtonText>
         </AddButton>
       </Content>
 

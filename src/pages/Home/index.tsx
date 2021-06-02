@@ -23,6 +23,8 @@ import {
   SearchInput,
   MinimumLettersNotice,
 } from "./styles";
+import { GameController } from "../../controllers/GameController";
+import { StoregedGameProps } from "../../services/GameService";
 
 const Home: React.FC = () => {
   const [search, setSearch] = useState("");
@@ -30,6 +32,7 @@ const Home: React.FC = () => {
   const [minimumLettersNotice, setMinimumLettersNotice] = useState(false);
 
   const [results, setResults] = useState<GameProps[]>([]);
+  const [games, setGames] = useState<StoregedGameProps[]>([]);
   const { theme, toggleTheme } = useTheme();
 
   const loadResults = useCallback(
@@ -87,6 +90,15 @@ const Home: React.FC = () => {
     }
   }, [search]);
 
+  useEffect(() => {
+    async function loadGames() {
+      const gameController = new GameController();
+      const games = await gameController.index();
+      setGames(games);
+    }
+    loadGames();
+  }, []);
+
   return (
     <Container
       contentContainerStyle={{ flexGrow: 1 }}
@@ -122,7 +134,7 @@ const Home: React.FC = () => {
       {loading ? (
         <MinimumLettersNotice>Loading...</MinimumLettersNotice>
       ) : (search && !minimumLettersNotice) === "" ? (
-        <Library />
+        <Library games={games} />
       ) : minimumLettersNotice ? (
         <MinimumLettersNotice>
           You must enter three letters before starting the search

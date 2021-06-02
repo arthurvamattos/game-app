@@ -1,6 +1,6 @@
 import React from "react";
-import { FlatList, View } from "react-native";
-import fakeGames from "../../utils/fakeGames";
+import { View } from "react-native";
+import { StoregedGameProps } from "../../services/GameService";
 
 import Favorites from "../Favorites";
 import GameCard from "../GameCard";
@@ -11,13 +11,15 @@ import {
   CategoryName,
   Title,
 } from "./styles";
-
 interface CategoryProps {
   name: string;
   status: boolean;
 }
+interface LibraryProps {
+  games: StoregedGameProps[];
+}
 
-function Library() {
+function Library({ games }: LibraryProps) {
   const CategoryElement: React.FC<CategoryProps> = ({ name, status }) => (
     <CategoryItem active={status}>
       <CategoryName active={status}>{name}</CategoryName>
@@ -34,14 +36,26 @@ function Library() {
         <CategoryElement status={false} name="PS1" />
       </CategoryList>
 
-      <Favorites />
+      <Favorites games={games.filter((game) => game.favorite)} />
 
       <Title>Now Playing</Title>
 
       <View>
-        {fakeGames.map((game) => (
-          <GameCard key={game.id} game={game} />
-        ))}
+        {games
+          .filter((game) => game.list === "Now Playing")
+          .map((game) => (
+            <GameCard key={game.id} game={game} />
+          ))}
+      </View>
+
+      <Title>Done</Title>
+
+      <View>
+        {games
+          .filter((game) => game.list === "Done")
+          .map((game) => (
+            <GameCard key={game.id} game={game} />
+          ))}
       </View>
     </Container>
   );

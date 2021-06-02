@@ -25,7 +25,7 @@ import {
   ITEM_HEIGHT,
 } from "./styles";
 
-import fakeGames from "../../utils/fakeGames";
+import { StoregedGameProps } from "../../services/GameService";
 const VISIBLE_ITEMS = 3;
 
 interface ItemProps {
@@ -33,10 +33,14 @@ interface ItemProps {
   index: number;
 }
 
+interface FavoriteProps {
+  games: StoregedGameProps[];
+}
+
 const AnimatedFavoriteWrapper =
   Animated.createAnimatedComponent(FavoriteWrapper);
 
-const Favorites: React.FC = () => {
+const Favorites: React.FC<FavoriteProps> = ({ games }) => {
   const [index, setIndex] = useState(0);
 
   const { navigate } = useNavigation();
@@ -119,7 +123,7 @@ const Favorites: React.FC = () => {
 
       <HeadersWrapper>
         <Animated.View style={{ transform: [{ translateY }] }}>
-          {fakeGames.map((game) => (
+          {games.map((game) => (
             <Header key={game.id}>
               <GameTitle>{game.name}</GameTitle>
               <GameYear>{game.year}</GameYear>
@@ -133,7 +137,7 @@ const Favorites: React.FC = () => {
         direction={Directions.LEFT}
         onHandlerStateChange={(event) => {
           if (event.nativeEvent.state === State.END) {
-            if (index === fakeGames.length - 1) {
+            if (index === games.length - 1) {
               return;
             }
             setActiveIndex(index + 1);
@@ -153,7 +157,7 @@ const Favorites: React.FC = () => {
           }}
         >
           <FlatList
-            data={fakeGames}
+            data={games}
             keyExtractor={(_, index) => String(index)}
             renderItem={renderItem}
             horizontal
@@ -172,7 +176,7 @@ const Favorites: React.FC = () => {
               style,
               ...props
             }) => {
-              const newStyle = [style, { zIndex: fakeGames.length - index }];
+              const newStyle = [style, { zIndex: games.length - index }];
               return (
                 <View style={newStyle} index={index} {...props}>
                   {children}

@@ -1,11 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GameProps } from "../types/Game";
-
-interface StoregedGameProps extends GameProps {
+export interface StoregedGameProps extends GameProps {
   list: string;
   favorite: boolean;
 }
-
 class GameService {
   async store(game: GameProps, list: string, favorite: boolean) {
     const storegedData = await AsyncStorage.getItem("@game-app:games");
@@ -48,6 +46,17 @@ class GameService {
       : [];
 
     return games;
+  }
+
+  async find(id: string) {
+    const storegedData = await AsyncStorage.getItem("@game-app:games");
+    const games = storegedData
+      ? (JSON.parse(storegedData) as StoregedGameProps[])
+      : [];
+
+    const game = games.filter((game) => game.id === id)[0];
+
+    return game;
   }
 }
 

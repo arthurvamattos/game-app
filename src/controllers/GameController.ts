@@ -15,13 +15,15 @@ class GameController {
   }
 
   async index() {
-    try {
-      const games = await this.gameService.index();
+    const games = await this.gameService.index();
 
-      return games;
-    } catch {
-      return { message: "Something went wrong, please try again" };
-    }
+    return games;
+  }
+
+  async find(id: string) {
+    const game = await this.gameService.find(id);
+
+    return game;
   }
 }
 
