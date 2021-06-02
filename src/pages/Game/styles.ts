@@ -3,6 +3,8 @@ import Constants from "expo-constants";
 import { BlurView } from "expo-blur";
 import { RectButton } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
+import { Dimensions } from "react-native";
+import { transparentize } from "polished";
 
 export const Container = styled.ScrollView`
   background: ${(props) => props.theme.colors.background};
@@ -84,4 +86,56 @@ interface IconProps {
 
 export const Icon = styled(Feather)<IconProps>`
   color: ${(props) => (props.active ? props.theme.colors.primary : "#F6F5FA")};
+`;
+
+export const ModalTitle = styled.Text`
+  text-align: center;
+  font-size: 18px;
+  font-family: ${(props) => props.theme.fonts.title};
+  color: ${(props) => props.theme.colors.text};
+`;
+
+export const ListsButtonsWrapper = styled.View`
+  margin: 36px 0 24px;
+  border-radius: 16px;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+  border: 3px solid ${(props) => props.theme.colors.lightText};
+`;
+
+interface ListButtonProps {
+  selected: boolean;
+}
+
+export const ListButton = styled(RectButton)<ListButtonProps>`
+  width: 50%;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  background: ${(props) =>
+    props.selected
+      ? props.theme.colors.lightText
+      : props.theme.colors.background};
+`;
+
+export const ListButtonText = styled.Text<ListButtonProps>`
+  text-align: center;
+  font-size: 14px;
+  font-family: ${(props) => props.theme.fonts.title};
+  color: ${(props) =>
+    props.selected ? props.theme.colors.background : props.theme.colors.text};
+`;
+
+export const Loading = styled.View`
+  background: ${(props) => transparentize(0.2, props.theme.colors.background)};
+  width: ${Dimensions.get("window").width}px;
+  height: ${Dimensions.get("window").height}px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+
+  align-items: center;
+  justify-content: center;
 `;

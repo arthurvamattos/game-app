@@ -45,7 +45,9 @@ const Home: React.FC = () => {
         const serializedGames =
           response.data.length > 0
             ? response.data
-                .filter((game) => game.cover !== undefined)
+                .filter(
+                  (game) => game.cover !== undefined && !!game.release_dates
+                )
                 .map((game) => {
                   const cover = `https:${game.cover.url.replace(
                     "thumb",
