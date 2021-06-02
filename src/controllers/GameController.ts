@@ -1,5 +1,6 @@
-import { GameService } from "../services/GameService";
+import { GameService, StoregedGameProps } from "../services/GameService";
 import { GameProps } from "../types/Game";
+import { CategoryController } from "./CategoryController";
 
 class GameController {
   gameService = new GameService();
@@ -7,6 +8,9 @@ class GameController {
   async store(game: GameProps, list: string, favorite: boolean) {
     try {
       const newGame = await this.gameService.store(game, list, favorite);
+
+      const categoryController = new CategoryController();
+      await categoryController.store(game.platforms);
 
       return newGame;
     } catch {
@@ -24,6 +28,10 @@ class GameController {
     const game = await this.gameService.find(id);
 
     return game;
+  }
+
+  async delete(game: StoregedGameProps) {
+    await this.gameService.delete(game);
   }
 }
 

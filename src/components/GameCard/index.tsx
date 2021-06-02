@@ -1,11 +1,12 @@
 import React from "react";
 import { Feather } from "@expo/vector-icons";
-import { Animated, Image, Vibration } from "react-native";
+import { Animated, Vibration } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import { useNavigation } from "react-navigation-hooks";
 import { SharedElement } from "react-navigation-shared-element";
 
-import { GameProps } from "../../types/Game";
+import { GameController } from "../../controllers/GameController";
+import { StoregedGameProps } from "../../services/GameService";
 
 import {
   Game,
@@ -17,18 +18,30 @@ import {
   DeleteGameButton,
   DeleteGameButtonComplement,
 } from "./styles";
+import { useGlobalContext } from "../../contexts/global";
 
 interface GameCardProps {
-  game: GameProps;
+  game: StoregedGameProps;
 }
 
 const GameCard: React.FC<GameCardProps> = ({ game }) => {
   const { navigate } = useNavigation();
+  const { games, setGames } = useGlobalContext();
 
-  function handleDelete(id: string) {
+  async function handleDelete(game: StoregedGameProps) {
     Vibration.vibrate();
+    const gameController = new GameController();
+    await gameController.delete(game);
+
+    const ids = games.map((game) => game.id);
+
+    const gamePosition = ids.indexOf(game.id);
+    if (gamePosition !== -1) {
+      const updatedGames = games.filter((item) => item.id !== game.id);
+      setGames(updatedGames);
+    }
   }
-  function handleGamePressed(game: GameProps) {
+  function handleGamePressed(game: StoregedGameProps) {
     navigate("Game", { game });
   }
 
@@ -40,7 +53,7 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
       useNativeAnimations={true}
       renderRightActions={() => (
         <Animated.View>
-          <DeleteGameButton onPress={() => handleDelete(game.id)}>
+          <DeleteGameButton onPress={() => handleDelete(game)}>
             <Feather name="trash" size={24} color="#fff" />
           </DeleteGameButton>
           <DeleteGameButtonComplement />

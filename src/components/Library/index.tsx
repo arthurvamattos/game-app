@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
+import { CategoryController } from "../../controllers/CategoryController";
+import { StoregedCategoryProps } from "../../services/CategoryService";
 import { StoregedGameProps } from "../../services/GameService";
 
 import Favorites from "../Favorites";
@@ -20,6 +22,17 @@ interface LibraryProps {
 }
 
 function Library({ games }: LibraryProps) {
+  const [categories, setCategories] = useState<StoregedCategoryProps[]>([]);
+
+  useEffect(() => {
+    async function loadCategories() {
+      const categoryController = new CategoryController();
+      const categories = await categoryController.index();
+      setCategories(categories);
+    }
+    loadCategories();
+  }, []);
+
   const CategoryElement: React.FC<CategoryProps> = ({ name, status }) => (
     <CategoryItem active={status}>
       <CategoryName active={status}>{name}</CategoryName>
@@ -29,34 +42,45 @@ function Library({ games }: LibraryProps) {
   return (
     <Container>
       <CategoryList>
-        <CategoryElement status={true} name="PS4" />
-        <CategoryElement status={false} name="PS5" />
-        <CategoryElement status={false} name="PS3" />
-        <CategoryElement status={false} name="PS2" />
-        <CategoryElement status={false} name="PS1" />
+        <CategoryElement status={true} name="All" />
+        {categories.map((category) => (
+          <CategoryElement
+            status={false}
+            name={category.name}
+            key={category.name}
+          />
+        ))}
       </CategoryList>
 
       <Favorites games={games.filter((game) => game.favorite)} />
 
-      <Title>Now Playing</Title>
+      {games.filter((game) => game.list === "Now Playing").length > 0 && (
+        <>
+          <Title>Now Playing</Title>
 
-      <View>
-        {games
-          .filter((game) => game.list === "Now Playing")
-          .map((game) => (
-            <GameCard key={game.id} game={game} />
-          ))}
-      </View>
+          <View>
+            {games
+              .filter((game) => game.list === "Now Playing")
+              .map((game) => (
+                <GameCard key={`now-playing-${game.id}`} game={game} />
+              ))}
+          </View>
+        </>
+      )}
 
-      <Title>Done</Title>
+      {games.filter((game) => game.list === "Done").length > 0 && (
+        <>
+          <Title>Done</Title>
 
-      <View>
-        {games
-          .filter((game) => game.list === "Done")
-          .map((game) => (
-            <GameCard key={game.id} game={game} />
-          ))}
-      </View>
+          <View>
+            {games
+              .filter((game) => game.list === "Done")
+              .map((game) => (
+                <GameCard key={`done-${game.id}`} game={game} />
+              ))}
+          </View>
+        </>
+      )}
     </Container>
   );
 }

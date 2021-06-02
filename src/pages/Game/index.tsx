@@ -26,6 +26,7 @@ import { GameProps } from "../../types/Game";
 import { Modalize } from "react-native-modalize";
 import { GameController } from "../../controllers/GameController";
 import { ActivityIndicator } from "react-native";
+import { useGlobalContext } from "../../contexts/global";
 
 const Game = () => {
   const [favorite, setFavorite] = useState(false);
@@ -35,6 +36,8 @@ const Game = () => {
   const modalizeRef = useRef<Modalize>(null);
 
   const { theme } = useTheme();
+  const { games, setGames, setSearch } = useGlobalContext();
+
   const { goBack, getParam } = useNavigation();
   const game: GameProps = getParam("game");
 
@@ -60,8 +63,18 @@ const Game = () => {
     setLoading(true);
     const gameController = new GameController();
     await gameController.store(game, list, favorite);
+    setGames([...games, { ...game, list, favorite }]);
+    setSearch("");
     setLoading(false);
     goBack();
+  }
+
+  async function handleFavorite() {
+    setFavorite((oldState) => !oldState);
+    const gameController = new GameController();
+    await gameController.store(game, list, favorite);
+    setGames([...games, { ...game, list, favorite }]);
+    setSearch("");
   }
 
   return (
@@ -84,7 +97,7 @@ const Game = () => {
             </HeaderButton>
           </HeaderButtonWrapper>
           <HeaderButtonWrapper intensity={40} tint="dark">
-            <HeaderButton onPress={() => setFavorite((oldState) => !oldState)}>
+            <HeaderButton onPress={handleFavorite}>
               <Icon name="heart" size={24} active={favorite} />
             </HeaderButton>
           </HeaderButtonWrapper>

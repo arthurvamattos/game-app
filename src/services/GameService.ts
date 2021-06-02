@@ -13,29 +13,22 @@ class GameService {
 
     const ids = games.map((game) => game.id);
 
-    // check if the game is already saved by searching for the id
-    if (ids.indexOf(game.id) !== -1) {
-      const gamePosition = ids.indexOf(game.id);
-
-      // check that the saved game list is the same as the one we're trying to
-      if (games[gamePosition].list !== list) {
-        const updatedGames = games.splice(gamePosition, 1, {
-          ...game,
-          list,
-          favorite,
-        });
-        await AsyncStorage.setItem(
-          "@game-app:games",
-          JSON.stringify(updatedGames)
-        );
-      }
+    const gamePosition = ids.indexOf(game.id);
+    if (gamePosition !== -1) {
+      games.splice(gamePosition, 1, {
+        ...game,
+        list,
+        favorite,
+      });
     } else {
-      await AsyncStorage.setItem(
-        "@game-app:games",
-        JSON.stringify([...games, { ...game, list, favorite }])
-      );
+      games.push({
+        ...game,
+        list,
+        favorite,
+      });
     }
 
+    await AsyncStorage.setItem("@game-app:games", JSON.stringify(games));
     return game;
   }
 
@@ -57,6 +50,22 @@ class GameService {
     const game = games.filter((game) => game.id === id)[0];
 
     return game;
+  }
+
+  async delete(game: StoregedGameProps) {
+    const storegedData = await AsyncStorage.getItem("@game-app:games");
+    const games = storegedData
+      ? (JSON.parse(storegedData) as StoregedGameProps[])
+      : [];
+
+    const ids = games.map((game) => game.id);
+
+    const gamePosition = ids.indexOf(game.id);
+    if (gamePosition !== -1) {
+      games.splice(gamePosition, 1);
+    }
+
+    await AsyncStorage.setItem("@game-app:games", JSON.stringify(games));
   }
 }
 

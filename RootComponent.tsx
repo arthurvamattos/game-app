@@ -3,11 +3,14 @@ import React from "react";
 
 import App from "./App";
 import { ThemeProvider } from "./src/contexts/theme";
+import { GlobalProvider } from "./src/contexts/global";
 
 const RootComponent: React.FC = () => {
   return (
     <ThemeProvider>
-      <App />
+      <GlobalProvider>
+        <App />
+      </GlobalProvider>
     </ThemeProvider>
   );
 };

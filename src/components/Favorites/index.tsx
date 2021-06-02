@@ -23,16 +23,18 @@ import {
   OVERFLOW_HEIGHT,
   ITEM_WIDTH,
   ITEM_HEIGHT,
+  NoFavoritesImage,
+  NoFavorites,
 } from "./styles";
 
 import { StoregedGameProps } from "../../services/GameService";
 const VISIBLE_ITEMS = 3;
+import noFavorites from "../../assets/sad.png";
 
 interface ItemProps {
   item: GameProps;
   index: number;
 }
-
 interface FavoriteProps {
   games: StoregedGameProps[];
 }
@@ -120,6 +122,13 @@ const Favorites: React.FC<FavoriteProps> = ({ games }) => {
         <SubTitle>LIVE IN YOUR HEART</SubTitle>
         <Title>Favorites</Title>
       </TextWrapper>
+
+      {games.length === 0 && (
+        <>
+          <NoFavoritesImage source={noFavorites} resizeMode="contain" />
+          <NoFavorites>You haven't saved any{"\n"}favorites yet</NoFavorites>
+        </>
+      )}
 
       <HeadersWrapper>
         <Animated.View style={{ transform: [{ translateY }] }}>

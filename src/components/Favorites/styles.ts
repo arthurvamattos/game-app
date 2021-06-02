@@ -6,6 +6,7 @@ const { width } = Dimensions.get("screen");
 export const OVERFLOW_HEIGHT = 70;
 export const ITEM_WIDTH = width * 0.76;
 export const ITEM_HEIGHT = ITEM_WIDTH * 1.1;
+const DEVICE_WIDTH = Dimensions.get("window").width;
 
 export const Wrapper = styled.View``;
 
@@ -56,4 +57,20 @@ export const GameYear = styled.Text`
   font-size: 16px;
   font-family: ${(props) => props.theme.fonts.title};
   color: ${(props) => props.theme.colors.lightText};
+`;
+
+export const NoFavoritesImage = styled.Image`
+  width: ${DEVICE_WIDTH * 0.8}px;
+  height: ${DEVICE_WIDTH * 0.6}px;
+  margin-top: 24px;
+  align-self: center;
+  margin-bottom: 16px;
+`;
+
+export const NoFavorites = styled.Text`
+  font-size: 20px;
+  line-height: 24px
+  text-align: center;
+  font-family: ${(props) => props.theme.fonts.heading};
+  color: ${(props) => props.theme.colors.primary};
 `;

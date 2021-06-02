@@ -4,6 +4,7 @@ import { debounce } from "lodash";
 import { Feather } from "@expo/vector-icons";
 
 import { useTheme } from "../../contexts/theme";
+import { useGlobalContext } from "../../contexts/global";
 
 import Library from "../../components/Library";
 import SearchResults from "../../components/SearchResults";
@@ -24,15 +25,13 @@ import {
   MinimumLettersNotice,
 } from "./styles";
 import { GameController } from "../../controllers/GameController";
-import { StoregedGameProps } from "../../services/GameService";
 
 const Home: React.FC = () => {
-  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [minimumLettersNotice, setMinimumLettersNotice] = useState(false);
-
   const [results, setResults] = useState<GameProps[]>([]);
-  const [games, setGames] = useState<StoregedGameProps[]>([]);
+
+  const { games, setGames, search, setSearch } = useGlobalContext();
   const { theme, toggleTheme } = useTheme();
 
   const loadResults = useCallback(
@@ -49,7 +48,10 @@ const Home: React.FC = () => {
           response.data.length > 0
             ? response.data
                 .filter(
-                  (game) => game.cover !== undefined && !!game.release_dates
+                  (game) =>
+                    game.cover !== undefined &&
+                    !!game.release_dates &&
+                    !!game.release_dates[0].y
                 )
                 .map((game) => {
                   const cover = `https:${game.cover.url.replace(
