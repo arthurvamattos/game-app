@@ -53,25 +53,9 @@ const Game = () => {
         </Header>
       </SharedElement>
       <Content>
-        <Console>{game.console}</Console>
+        <Console numberOfLines={1}>{game.platforms.join(", ")}</Console>
         <Name numberOfLines={1}>{game.name}</Name>
         <Description numberOfLines={7}>{game.summary}</Description>
-        <RateContainer>
-          <RateWrapper>
-            <Feather name="star" size={28} color={theme.colors.text} />
-            <View>
-              <RateTitle>Member ratings (IGDB)</RateTitle>
-              <Rate>95</Rate>
-            </View>
-          </RateWrapper>
-          <RateWrapper>
-            <Feather name="star" size={28} color={theme.colors.text} />
-            <View>
-              <RateTitle>Critic ratings (IGDB)</RateTitle>
-              <Rate>97</Rate>
-            </View>
-          </RateWrapper>
-        </RateContainer>
         <AddButton onPress={() => {}}>
           <AddButtonText>Add to list</AddButtonText>
         </AddButton>

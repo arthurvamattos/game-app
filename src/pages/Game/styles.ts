@@ -44,6 +44,7 @@ export const Content = styled.View`
 `;
 
 export const Console = styled.Text`
+  padding-top: 24px;
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.heading};
   font-size: 14px;
@@ -63,38 +64,11 @@ export const Description = styled.Text`
   margin-bottom: 24px;
 `;
 
-export const RateContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const RateWrapper = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const RateTitle = styled.Text`
-  color: ${(props) => props.theme.colors.primary};
-  font-family: ${(props) => props.theme.fonts.heading};
-  font-size: 10px;
-  margin-left: 8px;
-`;
-
-export const Rate = styled.Text`
-  color: ${(props) => props.theme.colors.text};
-  font-family: ${(props) => props.theme.fonts.heading};
-  font-size: 64px;
-  margin-left: 8px;
-  line-height: 64px;
-`;
-
 export const AddButton = styled(RectButton)`
   background: ${(props) => props.theme.colors.primary};
   height: 56px;
-  margin: 24px;
   border-radius: 16px;
+  margin-bottom: 24px;
   align-items: center;
   justify-content: center;
 `;
@@ -104,7 +78,6 @@ export const AddButtonText = styled.Text`
   font-family: ${(props) => props.theme.fonts.heading};
   font-size: 16px;
 `;
-
 interface IconProps {
   active: boolean;
 }
