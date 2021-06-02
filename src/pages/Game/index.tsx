@@ -1,6 +1,5 @@
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { View } from "react-native";
 import { useTheme } from "../../contexts/theme";
 import { SharedElement } from "react-navigation-shared-element";
 import { useNavigation } from "react-navigation-hooks";
@@ -14,10 +13,6 @@ import {
   Console,
   Name,
   Description,
-  RateContainer,
-  RateWrapper,
-  RateTitle,
-  Rate,
   AddButton,
   AddButtonText,
   Icon,
