@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
 import { useTheme } from "../../contexts/theme";
 import { SharedElement } from "react-navigation-shared-element";
@@ -20,12 +20,14 @@ import {
   Rate,
   AddButton,
   AddButtonText,
+  Icon,
 } from "./styles";
 import { GameProps } from "../../types/Game";
 
 const Game = () => {
-  const { theme } = useTheme();
+  const [favorite, setFavorite] = useState(false);
 
+  const { theme } = useTheme();
   const { goBack, getParam } = useNavigation();
   const game: GameProps = getParam("game");
 
@@ -44,8 +46,8 @@ const Game = () => {
             </HeaderButton>
           </HeaderButtonWrapper>
           <HeaderButtonWrapper intensity={40} tint="dark">
-            <HeaderButton>
-              <Feather name="heart" size={24} color="#F6F5FA" />
+            <HeaderButton onPress={() => setFavorite((oldState) => !oldState)}>
+              <Icon name="heart" size={24} active={favorite} />
             </HeaderButton>
           </HeaderButtonWrapper>
         </Header>

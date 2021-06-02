@@ -2,6 +2,7 @@ import styled from "styled-components/native";
 import Constants from "expo-constants";
 import { BlurView } from "expo-blur";
 import { RectButton } from "react-native-gesture-handler";
+import { Feather } from "@expo/vector-icons";
 
 export const Container = styled.ScrollView`
   background: ${(props) => props.theme.colors.background};
@@ -37,13 +38,12 @@ export const HeaderButton = styled.TouchableOpacity`
 `;
 
 export const Content = styled.View`
-  padding: 16px 24px 0;
+  padding: 0 24px;
   width: 100%;
   background: ${(props) => props.theme.colors.background};
 `;
 
 export const Console = styled.Text`
-  padding-top: 24px;
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.heading};
   font-size: 14px;
@@ -103,4 +103,12 @@ export const AddButtonText = styled.Text`
   color: #f6f5fa;
   font-family: ${(props) => props.theme.fonts.heading};
   font-size: 16px;
+`;
+
+interface IconProps {
+  active: boolean;
+}
+
+export const Icon = styled(Feather)<IconProps>`
+  color: ${(props) => (props.active ? props.theme.colors.primary : "#F6F5FA")};
 `;
