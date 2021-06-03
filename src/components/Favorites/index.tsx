@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { FlatList, View, Animated } from "react-native";
 import {
   Directions,
@@ -30,20 +36,24 @@ import {
 import { StoregedGameProps } from "../../services/GameService";
 const VISIBLE_ITEMS = 3;
 import noFavorites from "../../assets/sad.png";
+import { useGlobalContext } from "../../contexts/global";
 
 interface ItemProps {
   item: GameProps;
   index: number;
 }
-interface FavoriteProps {
-  games: StoregedGameProps[];
-}
 
 const AnimatedFavoriteWrapper =
   Animated.createAnimatedComponent(FavoriteWrapper);
 
-const Favorites: React.FC<FavoriteProps> = ({ games }) => {
+const Favorites: React.FC = () => {
   const [index, setIndex] = useState(0);
+  const { games: allGames } = useGlobalContext();
+
+  const games = useMemo(
+    () => allGames.filter((game) => game.favorite),
+    [allGames]
+  );
 
   const { navigate } = useNavigation();
 
@@ -123,78 +133,80 @@ const Favorites: React.FC<FavoriteProps> = ({ games }) => {
         <Title>Favorites</Title>
       </TextWrapper>
 
-      {games.length === 0 && (
+      {games.length === 0 ? (
         <>
           <NoFavoritesImage source={noFavorites} resizeMode="contain" />
           <NoFavorites>You haven't saved any{"\n"}favorites yet</NoFavorites>
         </>
-      )}
+      ) : (
+        <>
+          <HeadersWrapper>
+            <Animated.View style={{ transform: [{ translateY }] }}>
+              {games.map((game) => (
+                <Header key={game.id}>
+                  <GameTitle>{game.name}</GameTitle>
+                  <GameYear>{game.year}</GameYear>
+                </Header>
+              ))}
+            </Animated.View>
+          </HeadersWrapper>
 
-      <HeadersWrapper>
-        <Animated.View style={{ transform: [{ translateY }] }}>
-          {games.map((game) => (
-            <Header key={game.id}>
-              <GameTitle>{game.name}</GameTitle>
-              <GameYear>{game.year}</GameYear>
-            </Header>
-          ))}
-        </Animated.View>
-      </HeadersWrapper>
-
-      <FlingGestureHandler
-        key="left"
-        direction={Directions.LEFT}
-        onHandlerStateChange={(event) => {
-          if (event.nativeEvent.state === State.END) {
-            if (index === games.length - 1) {
-              return;
-            }
-            setActiveIndex(index + 1);
-          }
-        }}
-      >
-        <FlingGestureHandler
-          key="right"
-          direction={Directions.RIGHT}
-          onHandlerStateChange={(event) => {
-            if (event.nativeEvent.state === State.END) {
-              if (index === 0) {
-                return;
+          <FlingGestureHandler
+            key="left"
+            direction={Directions.LEFT}
+            onHandlerStateChange={(event) => {
+              if (event.nativeEvent.state === State.END) {
+                if (index === games.length - 1) {
+                  return;
+                }
+                setActiveIndex(index + 1);
               }
-              setActiveIndex(index - 1);
-            }
-          }}
-        >
-          <FlatList
-            data={games}
-            keyExtractor={(_, index) => String(index)}
-            renderItem={renderItem}
-            horizontal
-            inverted
-            contentContainerStyle={{
-              flex: 1,
-              justifyContent: "center",
-              height: ITEM_HEIGHT,
             }}
-            scrollEnabled={false}
-            removeClippedSubviews={false}
-            CellRendererComponent={({
-              item,
-              index,
-              children,
-              style,
-              ...props
-            }) => {
-              const newStyle = [style, { zIndex: games.length - index }];
-              return (
-                <View style={newStyle} index={index} {...props}>
-                  {children}
-                </View>
-              );
-            }}
-          />
-        </FlingGestureHandler>
-      </FlingGestureHandler>
+          >
+            <FlingGestureHandler
+              key="right"
+              direction={Directions.RIGHT}
+              onHandlerStateChange={(event) => {
+                if (event.nativeEvent.state === State.END) {
+                  if (index === 0) {
+                    return;
+                  }
+                  setActiveIndex(index - 1);
+                }
+              }}
+            >
+              <FlatList
+                data={games}
+                keyExtractor={(_, index) => String(index)}
+                renderItem={renderItem}
+                horizontal
+                inverted
+                contentContainerStyle={{
+                  flex: 1,
+                  justifyContent: "center",
+                  height: ITEM_HEIGHT,
+                }}
+                scrollEnabled={false}
+                removeClippedSubviews={false}
+                CellRendererComponent={({
+                  item,
+                  index,
+                  children,
+                  style,
+                  ...props
+                }) => {
+                  const newStyle = [style, { zIndex: games.length - index }];
+                  return (
+                    <View style={newStyle} index={index} {...props}>
+                      {children}
+                    </View>
+                  );
+                }}
+              />
+            </FlingGestureHandler>
+          </FlingGestureHandler>
+        </>
+      )}
     </Wrapper>
   );
 };

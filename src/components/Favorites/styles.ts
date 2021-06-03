@@ -8,7 +8,9 @@ export const ITEM_WIDTH = width * 0.76;
 export const ITEM_HEIGHT = ITEM_WIDTH * 1.1;
 const DEVICE_WIDTH = Dimensions.get("window").width;
 
-export const Wrapper = styled.View``;
+export const Wrapper = styled.View`
+  flex: 1;
+`;
 
 export const TextWrapper = styled.View`
   padding: 0 24px;
@@ -69,7 +71,7 @@ export const NoFavoritesImage = styled.Image`
 
 export const NoFavorites = styled.Text`
   font-size: 20px;
-  line-height: 24px
+  line-height: 24px;
   text-align: center;
   font-family: ${(props) => props.theme.fonts.heading};
   color: ${(props) => props.theme.colors.primary};

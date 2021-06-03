@@ -15,11 +15,13 @@ class GameService {
 
     const gamePosition = ids.indexOf(game.id);
     if (gamePosition !== -1) {
-      games.splice(gamePosition, 1, {
-        ...game,
-        list,
-        favorite,
-      });
+      if (games[gamePosition].list !== list) {
+        games.splice(gamePosition, 1, {
+          ...game,
+          list,
+          favorite,
+        });
+      }
     } else {
       games.push({
         ...game,

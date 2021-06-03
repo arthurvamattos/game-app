@@ -46,7 +46,7 @@ const Game = () => {
       const gameController = new GameController();
       const storegedGame = await gameController.find(game.id);
 
-      if (storegedGame.name) {
+      if (storegedGame) {
         setFavorite(storegedGame.favorite);
         setList(storegedGame.list);
         setListButtonText("Change list");
@@ -59,22 +59,38 @@ const Game = () => {
     modalizeRef.current?.open();
   };
 
-  async function handleAddToList() {
+  async function handleAddToList(shouldGoBack: boolean) {
     setLoading(true);
     const gameController = new GameController();
     await gameController.store(game, list, favorite);
-    setGames([...games, { ...game, list, favorite }]);
+
+    const updatedGames = games;
+    const ids = updatedGames.map((game) => game.id);
+    const gamePosition = ids.indexOf(game.id);
+    if (gamePosition !== -1) {
+      if (updatedGames[gamePosition].list !== list) {
+        updatedGames.splice(gamePosition, 1, {
+          ...game,
+          list,
+          favorite,
+        });
+      }
+    } else {
+      updatedGames.push({
+        ...game,
+        list,
+        favorite,
+      });
+    }
+
+    setGames(updatedGames);
     setSearch("");
     setLoading(false);
-    goBack();
+    shouldGoBack && goBack();
   }
 
   async function handleFavorite() {
     setFavorite((oldState) => !oldState);
-    const gameController = new GameController();
-    await gameController.store(game, list, favorite);
-    setGames([...games, { ...game, list, favorite }]);
-    setSearch("");
   }
 
   return (
@@ -140,7 +156,7 @@ const Game = () => {
           </ListButton>
         </ListsButtonsWrapper>
 
-        <AddButton onPress={handleAddToList}>
+        <AddButton onPress={() => handleAddToList(true)}>
           <AddButtonText>{`Add to ${list}`}</AddButtonText>
         </AddButton>
       </Modalize>

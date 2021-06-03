@@ -52,7 +52,7 @@ function Library({ games }: LibraryProps) {
         ))}
       </CategoryList>
 
-      <Favorites games={games.filter((game) => game.favorite)} />
+      <Favorites />
 
       {games.filter((game) => game.list === "Now Playing").length > 0 && (
         <>
