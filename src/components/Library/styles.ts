@@ -4,6 +4,7 @@ export const Container = styled.View`
   width: 100%;
   flex: 1;
   margin-bottom: 60px;
+  padding-bottom: 24px;
 `;
 
 export const CategoryList = styled.ScrollView.attrs({
