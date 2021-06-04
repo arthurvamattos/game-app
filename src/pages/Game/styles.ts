@@ -98,18 +98,23 @@ export const ModalTitle = styled.Text`
 export const ListsButtonsWrapper = styled.View`
   margin: 36px 0 24px;
   border-radius: 16px;
-  flex-direction: row;
-  align-items: center;
+
   overflow: hidden;
   border: 3px solid ${(props) => props.theme.colors.lightText};
 `;
 
+export const ListButtonsRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
 interface ListButtonProps {
   selected: boolean;
+  size: string;
 }
 
 export const ListButton = styled(RectButton)<ListButtonProps>`
-  width: 50%;
+  width: ${(props) => (props.size === "small" ? "50%" : "100%")};
   height: 56px;
   align-items: center;
   justify-content: center;
@@ -119,7 +124,11 @@ export const ListButton = styled(RectButton)<ListButtonProps>`
       : props.theme.colors.background};
 `;
 
-export const ListButtonText = styled.Text<ListButtonProps>`
+interface ListButtonTextProps {
+  selected: boolean;
+}
+
+export const ListButtonText = styled.Text<ListButtonTextProps>`
   text-align: center;
   font-size: 14px;
   font-family: ${(props) => props.theme.fonts.title};

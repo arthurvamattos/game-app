@@ -76,6 +76,20 @@ function Library() {
           </View>
         </>
       )}
+
+      {games.filter((game) => game.list === "I Want Play").length > 0 && (
+        <>
+          <Title>I Want Play</Title>
+
+          <View>
+            {games
+              .filter((game) => game.list === "I Want Play")
+              .map((game) => (
+                <GameCard key={`done-${game.id}`} game={game} />
+              ))}
+          </View>
+        </>
+      )}
     </Container>
   );
 }

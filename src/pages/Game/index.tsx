@@ -21,6 +21,7 @@ import {
   ListButton,
   ListButtonText,
   Loading,
+  ListButtonsRow,
 } from "./styles";
 import { GameProps } from "../../types/Game";
 import { Modalize } from "react-native-modalize";
@@ -148,7 +149,7 @@ const Game = () => {
 
       <Modalize
         ref={modalizeRef}
-        snapPoint={280}
+        snapPoint={340}
         handlePosition="inside"
         modalStyle={{
           backgroundColor: theme.colors.foreground,
@@ -158,19 +159,32 @@ const Game = () => {
       >
         <ModalTitle>Select the list</ModalTitle>
         <ListsButtonsWrapper>
+          <ListButtonsRow>
+            <ListButton
+              onPress={() => setList("Now Playing")}
+              selected={list === "Now Playing"}
+              size="small"
+            >
+              <ListButtonText selected={list === "Now Playing"}>
+                Now Playing
+              </ListButtonText>
+            </ListButton>
+            <ListButton
+              onPress={() => setList("Done")}
+              selected={list === "Done"}
+              size="small"
+            >
+              <ListButtonText selected={list === "Done"}>Done</ListButtonText>
+            </ListButton>
+          </ListButtonsRow>
           <ListButton
-            onPress={() => setList("Now Playing")}
-            selected={list === "Now Playing"}
+            onPress={() => setList("I Want Play")}
+            selected={list === "I Want Play"}
+            size="large"
           >
-            <ListButtonText selected={list === "Now Playing"}>
-              Now Playing
+            <ListButtonText selected={list === "I Want Play"}>
+              I Want Play
             </ListButtonText>
-          </ListButton>
-          <ListButton
-            onPress={() => setList("Done")}
-            selected={list === "Done"}
-          >
-            <ListButtonText selected={list === "Done"}>Done</ListButtonText>
           </ListButton>
         </ListsButtonsWrapper>
 
