@@ -31,7 +31,7 @@ const Home: React.FC = () => {
   const [minimumLettersNotice, setMinimumLettersNotice] = useState(false);
   const [results, setResults] = useState<GameProps[]>([]);
 
-  const { games, setGames, search, setSearch } = useGlobalContext();
+  const { setGames, search, setSearch } = useGlobalContext();
   const { theme, toggleTheme } = useTheme();
 
   const loadResults = useCallback(
@@ -136,7 +136,7 @@ const Home: React.FC = () => {
       {loading ? (
         <MinimumLettersNotice>Loading...</MinimumLettersNotice>
       ) : (search && !minimumLettersNotice) === "" ? (
-        <Library games={games} />
+        <Library />
       ) : minimumLettersNotice ? (
         <MinimumLettersNotice>
           You must enter three letters before starting the search

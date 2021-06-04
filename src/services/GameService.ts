@@ -1,11 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GameProps } from "../types/Game";
+import { CategoryController } from "../controllers/CategoryController";
 export interface StoregedGameProps extends GameProps {
   list: string;
-  favorite: boolean;
 }
 class GameService {
-  async store(game: GameProps, list: string, favorite: boolean) {
+  async store(game: GameProps, list: string) {
     const storegedData = await AsyncStorage.getItem("@game-app:games");
     const games = storegedData
       ? (JSON.parse(storegedData) as StoregedGameProps[])
@@ -19,14 +19,12 @@ class GameService {
         games.splice(gamePosition, 1, {
           ...game,
           list,
-          favorite,
         });
       }
     } else {
       games.push({
         ...game,
         list,
-        favorite,
       });
     }
 
@@ -66,6 +64,14 @@ class GameService {
     if (gamePosition !== -1) {
       games.splice(gamePosition, 1);
     }
+
+    const favorites = new Array();
+    games.forEach((game) => {
+      favorites.push(game.platforms);
+    });
+
+    const categoryController = new CategoryController();
+    categoryController.update(favorites);
 
     await AsyncStorage.setItem("@game-app:games", JSON.stringify(games));
   }

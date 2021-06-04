@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
+import { useGlobalContext } from "../../contexts/global";
 import { CategoryController } from "../../controllers/CategoryController";
-import { StoregedCategoryProps } from "../../services/CategoryService";
 import { StoregedGameProps } from "../../services/GameService";
 
 import Favorites from "../Favorites";
@@ -17,12 +17,10 @@ interface CategoryProps {
   name: string;
   status: boolean;
 }
-interface LibraryProps {
-  games: StoregedGameProps[];
-}
 
-function Library({ games }: LibraryProps) {
-  const [categories, setCategories] = useState<StoregedCategoryProps[]>([]);
+function Library() {
+  const [categories, setCategories] = useState<string[]>([]);
+  const { games } = useGlobalContext();
 
   useEffect(() => {
     async function loadCategories() {
@@ -31,7 +29,7 @@ function Library({ games }: LibraryProps) {
       setCategories(categories);
     }
     loadCategories();
-  }, []);
+  }, [games]);
 
   const CategoryElement: React.FC<CategoryProps> = ({ name, status }) => (
     <CategoryItem active={status}>
@@ -43,13 +41,10 @@ function Library({ games }: LibraryProps) {
     <Container>
       <CategoryList>
         <CategoryElement status={true} name="All" />
-        {categories.map((category) => (
-          <CategoryElement
-            status={false}
-            name={category.name}
-            key={category.name}
-          />
-        ))}
+        {categories !== undefined &&
+          categories.map((category) => (
+            <CategoryElement status={false} name={category} key={category} />
+          ))}
       </CategoryList>
 
       <Favorites />

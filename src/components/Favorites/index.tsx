@@ -37,6 +37,7 @@ import { StoregedGameProps } from "../../services/GameService";
 const VISIBLE_ITEMS = 3;
 import noFavorites from "../../assets/sad.png";
 import { useGlobalContext } from "../../contexts/global";
+import { FavoriteController } from "../../controllers/FavoriteController";
 
 interface ItemProps {
   item: GameProps;
@@ -48,12 +49,22 @@ const AnimatedFavoriteWrapper =
 
 const Favorites: React.FC = () => {
   const [index, setIndex] = useState(0);
-  const { games: allGames } = useGlobalContext();
+  const { favorites, setFavorites } = useGlobalContext();
 
-  const games = useMemo(
-    () => allGames.filter((game) => game.favorite),
-    [allGames]
-  );
+  useEffect(() => {
+    async function loadFavorites() {
+      const favoriteController = new FavoriteController();
+      const favorites = await favoriteController.index();
+      if (favorites) {
+        setFavorites(favorites);
+      }
+    }
+    loadFavorites();
+  }, []);
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [favorites]);
 
   const { navigate } = useNavigation();
 
@@ -133,7 +144,7 @@ const Favorites: React.FC = () => {
         <Title>Favorites</Title>
       </TextWrapper>
 
-      {games.length === 0 ? (
+      {favorites.length === 0 ? (
         <>
           <NoFavoritesImage source={noFavorites} resizeMode="contain" />
           <NoFavorites>You haven't saved any{"\n"}favorites yet</NoFavorites>
@@ -142,7 +153,7 @@ const Favorites: React.FC = () => {
         <>
           <HeadersWrapper>
             <Animated.View style={{ transform: [{ translateY }] }}>
-              {games.map((game) => (
+              {favorites.map((game) => (
                 <Header key={game.id}>
                   <GameTitle>{game.name}</GameTitle>
                   <GameYear>{game.year}</GameYear>
@@ -156,7 +167,7 @@ const Favorites: React.FC = () => {
             direction={Directions.LEFT}
             onHandlerStateChange={(event) => {
               if (event.nativeEvent.state === State.END) {
-                if (index === games.length - 1) {
+                if (index === favorites.length - 1) {
                   return;
                 }
                 setActiveIndex(index + 1);
@@ -176,7 +187,7 @@ const Favorites: React.FC = () => {
               }}
             >
               <FlatList
-                data={games}
+                data={favorites}
                 keyExtractor={(_, index) => String(index)}
                 renderItem={renderItem}
                 horizontal
@@ -195,7 +206,10 @@ const Favorites: React.FC = () => {
                   style,
                   ...props
                 }) => {
-                  const newStyle = [style, { zIndex: games.length - index }];
+                  const newStyle = [
+                    style,
+                    { zIndex: favorites.length - index },
+                  ];
                   return (
                     <View style={newStyle} index={index} {...props}>
                       {children}

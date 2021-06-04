@@ -12,6 +12,10 @@ class CategoryController {
 
     return categories;
   }
+
+  async update(categories: string[]) {
+    await this.categoryService.update(Array.from(categories));
+  }
 }
 
 export { CategoryController };

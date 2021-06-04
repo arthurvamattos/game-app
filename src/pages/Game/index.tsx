@@ -27,6 +27,7 @@ import { Modalize } from "react-native-modalize";
 import { GameController } from "../../controllers/GameController";
 import { ActivityIndicator } from "react-native";
 import { useGlobalContext } from "../../contexts/global";
+import { FavoriteController } from "../../controllers/FavoriteController";
 
 const Game = () => {
   const [favorite, setFavorite] = useState(false);
@@ -36,7 +37,8 @@ const Game = () => {
   const modalizeRef = useRef<Modalize>(null);
 
   const { theme } = useTheme();
-  const { games, setGames, setSearch } = useGlobalContext();
+  const { games, setGames, setSearch, favorites, setFavorites } =
+    useGlobalContext();
 
   const { goBack, getParam } = useNavigation();
   const game: GameProps = getParam("game");
@@ -44,10 +46,15 @@ const Game = () => {
   useEffect(() => {
     async function loadGame() {
       const gameController = new GameController();
+      const favoriteController = new FavoriteController();
       const storegedGame = await gameController.find(game.id);
+      const isFavorite = await favoriteController.find(game.id);
+
+      if (isFavorite) {
+        setFavorite(true);
+      }
 
       if (storegedGame) {
-        setFavorite(storegedGame.favorite);
         setList(storegedGame.list);
         setListButtonText("Change list");
       }
@@ -64,33 +71,44 @@ const Game = () => {
     const gameController = new GameController();
     await gameController.store(game, list, favorite);
 
-    const updatedGames = games;
+    let updatedGames = games;
     const ids = updatedGames.map((game) => game.id);
     const gamePosition = ids.indexOf(game.id);
+
     if (gamePosition !== -1) {
-      if (updatedGames[gamePosition].list !== list) {
-        updatedGames.splice(gamePosition, 1, {
-          ...game,
-          list,
-          favorite,
-        });
-      }
+      setGames((oldState) =>
+        oldState.map((item) => {
+          if (item.id === game.id) {
+            return {
+              ...game,
+              list,
+            };
+          }
+          return item;
+        })
+      );
     } else {
-      updatedGames.push({
-        ...game,
-        list,
-        favorite,
-      });
+      setGames((oldState) => [...oldState, { ...game, list }]);
     }
 
-    setGames(updatedGames);
     setSearch("");
     setLoading(false);
     shouldGoBack && goBack();
   }
 
   async function handleFavorite() {
-    setFavorite((oldState) => !oldState);
+    const oldState = favorite;
+    setFavorite(!oldState);
+    const favoriteController = new FavoriteController();
+    if (oldState) {
+      await favoriteController.delete(game);
+      setFavorites((oldState) =>
+        oldState.filter((favorite) => favorite.id !== game.id)
+      );
+    } else {
+      await favoriteController.store(game);
+      setFavorites((oldState) => [...oldState, game]);
+    }
   }
 
   return (
