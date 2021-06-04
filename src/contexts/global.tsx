@@ -28,6 +28,7 @@ export const GlobalProvider: React.FC = ({ children }) => {
   const [games, setGames] = useState<StoregedGameProps[]>([]);
   const [filteredGames, setFilteredGames] = useState<StoregedGameProps[]>([]);
   const [favorites, setFavorites] = useState<GameProps[]>([]);
+  const [filteredFavorites, setFilteredFavorites] = useState<GameProps[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([
     "All",
   ]);
@@ -50,6 +51,24 @@ export const GlobalProvider: React.FC = ({ children }) => {
     }
   }, [selectedCategories, games]);
 
+  useEffect(() => {
+    if (selectedCategories.includes("All")) {
+      setFilteredFavorites(favorites);
+    } else {
+      setFilteredFavorites(
+        favorites.filter((game) => {
+          let hasCategory = false;
+          game.platforms.forEach((platform) => {
+            if (selectedCategories.includes(platform)) {
+              hasCategory = true;
+            }
+          });
+          return hasCategory;
+        })
+      );
+    }
+  }, [selectedCategories, favorites]);
+
   return (
     <GlobalContext.Provider
       value={{
@@ -58,7 +77,7 @@ export const GlobalProvider: React.FC = ({ children }) => {
         games: filteredGames,
         setGames,
         setFilteredGames,
-        favorites,
+        favorites: filteredFavorites,
         setFavorites,
         selectedCategories,
         setSelectedCategories,
