@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 import { useGlobalContext } from "../../contexts/global";
 import { CategoryController } from "../../controllers/CategoryController";
@@ -20,7 +20,8 @@ interface CategoryProps {
 
 function Library() {
   const [categories, setCategories] = useState<string[]>([]);
-  const { games } = useGlobalContext();
+  const { games, selectedCategories, setSelectedCategories } =
+    useGlobalContext();
 
   useEffect(() => {
     async function loadCategories() {
@@ -31,8 +32,32 @@ function Library() {
     loadCategories();
   }, [games]);
 
+  function handleCategorySelected(name: string) {
+    if (name === "All") {
+      setSelectedCategories(["All"]);
+    } else {
+      if (selectedCategories.includes(name)) {
+        setSelectedCategories((oldState) =>
+          oldState.filter((category) => category !== name)
+        );
+      } else {
+        if (selectedCategories[0] === "All") {
+          setSelectedCategories([name]);
+        } else {
+          setSelectedCategories((oldState) => [...oldState, name]);
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (selectedCategories.length === 0) {
+      setSelectedCategories(["All"]);
+    }
+  }, [selectedCategories]);
+
   const CategoryElement: React.FC<CategoryProps> = ({ name, status }) => (
-    <CategoryItem active={status}>
+    <CategoryItem active={status} onPress={() => handleCategorySelected(name)}>
       <CategoryName active={status}>{name}</CategoryName>
     </CategoryItem>
   );
@@ -40,10 +65,17 @@ function Library() {
   return (
     <Container>
       <CategoryList>
-        <CategoryElement status={true} name="All" />
+        <CategoryElement
+          status={selectedCategories.includes("All")}
+          name="All"
+        />
         {categories !== undefined &&
           categories.map((category) => (
-            <CategoryElement status={false} name={category} key={category} />
+            <CategoryElement
+              status={selectedCategories.includes(category)}
+              name={category}
+              key={category}
+            />
           ))}
       </CategoryList>
 

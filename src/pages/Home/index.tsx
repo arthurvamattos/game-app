@@ -31,7 +31,7 @@ const Home: React.FC = () => {
   const [minimumLettersNotice, setMinimumLettersNotice] = useState(false);
   const [results, setResults] = useState<GameProps[]>([]);
 
-  const { setGames, search, setSearch } = useGlobalContext();
+  const { setGames, search, setSearch, setFilteredGames } = useGlobalContext();
   const { theme, toggleTheme } = useTheme();
 
   const loadResults = useCallback(
@@ -97,6 +97,7 @@ const Home: React.FC = () => {
       const gameController = new GameController();
       const games = await gameController.index();
       setGames(games);
+      setFilteredGames(games);
     }
     loadGames();
   }, []);
