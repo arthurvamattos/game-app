@@ -15,6 +15,7 @@ Game App
 </p>
 
 <div align="center">
+  <img src="https://user-images.githubusercontent.com/23246259/121682922-aeb00180-ca8a-11eb-9531-934ce4b3264a.gif" alt="demo" height="420">
   <img src="https://user-images.githubusercontent.com/23246257/120868476-27323200-c562-11eb-96e5-92b2811a7a70.png" alt="overview" height="420">
 </div>
 
